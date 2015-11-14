@@ -4,7 +4,7 @@
   "description": "Track and host manifests for iOS apps",
   "main": "index.js",
   "scripts": {
-    "test": "mocha spec/**",
+    "test": "NODE_ENV=test mocha --compilers js:babel-core/register spec/**",
     "start": "node index"
   },
   "repository": {
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "chai": "^3.4.1",
+    "chai-as-promised": "^5.1.0",
     "mocha": "^2.3.3"
   }
 }
