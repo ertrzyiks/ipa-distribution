@@ -21,6 +21,7 @@
     "babel-core": "^5.8.34",
     "express": "^4.13.3",
     "knex": "^0.9.0",
+    "node-uuid": "^1.4.7",
     "sqlite3": "^3.1.1"
   },
   "devDependencies": {

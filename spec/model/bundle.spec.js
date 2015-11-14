@@ -37,4 +37,80 @@ describe('Bundle Model', () => {
                 .to.eventually.be.an('undefined');
         });
     });
+
+    describe('create', () => {
+        it('should  assign unique id for created bundle', () => {
+            let bundle = {
+                app_id: 'com.example.JustForTest',
+                name: 'Just For Test',
+                version: '1.0.0',
+                url: 'http://example.com/just-for-test.ipa'
+            };
+
+            return expect(Bundle.create(bundle))
+                .to.eventually.have.property('id');
+        });
+
+        it('should ignore given id for created bundle', () => {
+            let bundle = {
+                id: 'de305d54-75b4-431b-adb2-eb6b9e546000',
+                app_id: 'com.example.JustForTest',
+                name: 'Just For Test',
+                version: '1.0.0',
+                url: 'http://example.com/just-for-test.ipa'
+            };
+
+            return expect(Bundle.create(bundle))
+                .to.eventually.have.property('id')
+                .and.not.equal('de305d54-75b4-431b-adb2-eb6b9e546000');
+        });
+
+        it('should reject bundle without app_id', () => {
+            let bundle = {
+                id: 'de305d54-75b4-431b-adb2-eb6b9e546000',
+                name: 'Just For Test',
+                version: '1.0.0',
+                url: 'http://example.com/just-for-test.ipa'
+            };
+
+            return expect(Bundle.create(bundle))
+                .to.be.rejected;
+        });
+
+        it('should reject bundle without name', () => {
+            let bundle = {
+                id: 'de305d54-75b4-431b-adb2-eb6b9e546000',
+                app_id: 'com.example.JustForTest',
+                version: '1.0.0',
+                url: 'http://example.com/just-for-test.ipa'
+            };
+
+            return expect(Bundle.create(bundle))
+                .to.be.rejected;
+        });
+
+        it('should reject bundle without version', () => {
+            let bundle = {
+                id: 'de305d54-75b4-431b-adb2-eb6b9e546000',
+                app_id: 'com.example.JustForTest',
+                name: 'Just For Test',
+                url: 'http://example.com/just-for-test.ipa'
+            };
+
+            return expect(Bundle.create(bundle))
+                .to.be.rejected;
+        });
+
+        it('should reject bundle without url', () => {
+            let bundle = {
+                id: 'de305d54-75b4-431b-adb2-eb6b9e546000',
+                app_id: 'com.example.JustForTest',
+                name: 'Just For Test',
+                version: '1.0.0'
+            };
+
+            return expect(Bundle.create(bundle))
+                .to.be.rejected;
+        });
+    });
 });
