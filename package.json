@@ -1,0 +1,30 @@
+{
+  "name": "ipa-distribution",
+  "version": "0.0.1",
+  "description": "Track and host manifests for iOS apps",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha spec/**",
+    "start": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ertrzyiks/ipa-distribution.git"
+  },
+  "author": "ertrzyiks <mateusz.derks@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ertrzyiks/ipa-distribution/issues"
+  },
+  "homepage": "https://github.com/ertrzyiks/ipa-distribution#readme",
+  "dependencies": {
+    "babel-core": "^5.8.34",
+    "express": "^4.13.3",
+    "knex": "^0.9.0",
+    "sqlite3": "^3.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.3"
+  }
+}
