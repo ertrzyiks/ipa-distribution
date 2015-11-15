@@ -1,5 +1,6 @@
-import getDataConnector from '../../src/getDataConnector';
+import defaults from 'defaults';
 import uuid from 'node-uuid';
+import getDataConnector from '../../src/getDataConnector';
 
 let knex = getDataConnector();
 
@@ -17,7 +18,15 @@ function create(data) {
 }
 
 function list(params) {
+    var options = defaults(params, {
+        page: 1,
+        pageSize: 10
+    });
 
+    return knex.table('bundles')
+        .select('*')
+        .offset(options.pageSize * (options.page - 1))
+        .limit(options.pageSize);
 }
 
 export default {

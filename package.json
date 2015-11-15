@@ -19,6 +19,7 @@
   "homepage": "https://github.com/ertrzyiks/ipa-distribution#readme",
   "dependencies": {
     "babel-core": "^5.8.34",
+    "defaults": "^1.0.3",
     "express": "^4.13.3",
     "knex": "^0.9.0",
     "node-uuid": "^1.4.7",

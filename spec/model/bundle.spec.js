@@ -27,13 +27,13 @@ describe('Bundle Model', () => {
         });
 
         it('should fetch bundle data by id (2)', () => {
-            return expect(Bundle.get('de305d54-75b4-431b-adb2-eb6b9e546015'))
+            return expect(Bundle.get('de305d54-75b4-431b-adb2-eb6b9e546021'))
                 .to.eventually.have.property('app_id')
                 .and.equal('com.example.TestingApp');
         });
 
         it('should be resolved with undefined when bundle does not exists', () => {
-            return expect(Bundle.get('de305d54-75b4-431b-adb2-eb6b9e546016'))
+            return expect(Bundle.get('de305d54-75b4-431b-adb2-eb6b9e546099'))
                 .to.eventually.be.an('undefined');
         });
     });
@@ -111,6 +111,31 @@ describe('Bundle Model', () => {
 
             return expect(Bundle.create(bundle))
                 .to.be.rejected;
+        });
+    });
+
+    describe('list', () => {
+        it('should first page of bundles', () => {
+            return expect(Bundle.list())
+                .to.eventually.have.length(10)
+        });
+
+        it('should second page of bundles', () => {
+            var params = {
+                page: 2
+            };
+
+            return expect(Bundle.list(params))
+                .to.eventually.have.length(4)
+        });
+
+        it('should allow set page size', () => {
+            var params = {
+                pageSize: 5
+            };
+
+            return expect(Bundle.list(params))
+                .to.eventually.have.length(5)
         });
     });
 });
