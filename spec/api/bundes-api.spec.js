@@ -118,5 +118,12 @@ describe('Bundles API', () => {
                     expect(text).not.to.contain('http://http://example.com/MyApp-1.0.0.ipa');
                 })
         });
+
+        it('should respond with 404 error when requested with invalid id', () => {
+
+            return apiRequest
+                .get('/v1/bundles/de305d54-75b4-431b-adb2-eb6b9e546099/manifest.plist')
+                .expect(404);
+        });
     });
 });
