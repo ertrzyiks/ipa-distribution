@@ -115,6 +115,7 @@ describe('Bundles API', () => {
                     expect(text).to.contain('1.0.0');
                     expect(text).to.contain('com.example.MyApp');
                     expect(text).to.contain('http://example.com/MyApp-1.0.0.ipa');
+                    expect(text).not.to.contain('http://http://example.com/MyApp-1.0.0.ipa');
                 })
         });
     });
