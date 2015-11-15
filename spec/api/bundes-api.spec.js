@@ -45,6 +45,22 @@ describe('Bundles API', () => {
                     expect(body).to.have.length(4);
                 })
         });
+
+        it('should include manifest url and download url', () => {
+            return apiRequest
+                .get('/v1/bundles')
+                .expect(200)
+                .expect((res) => {
+                    let body = res.body;
+                    let bundle = body[0];
+
+                    expect(bundle).to.have.property('manifest_url')
+                        .and.contain(`/v1/bundles/${bundle.id}/manifest.plist`);
+                    expect(bundle).to.have.property('download_url')
+                        .and.contain('itms-services://?action=download-manifest&url=')
+                        .and.contain(bundle.manifest_url);
+                })
+        });
     });
 
     describe('get', () => {

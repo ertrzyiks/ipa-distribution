@@ -26,9 +26,12 @@ v1.get('/bundles/:id', (req, res) => {
 });
 
 v1.get('/bundles', (req, res) => {
-   Bundle.list(req.query).then((bundles) => {
-      res.json(bundles);
-   });
+   Bundle
+       .list(req.query)
+       .then((bundles) => bundles.map(prepareBundleObject))
+       .then((bundles) => {
+         res.json(bundles);
+      });
 });
 
 v1.post('/bundles', (req, res) => {
