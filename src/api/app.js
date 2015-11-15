@@ -5,6 +5,12 @@ var app = express();
 
 var v1 = express();
 
+function prepareBundleObject(bundle) {
+   bundle.manifest_url = `${process.env.BASE_URL}/v1/bundles/${bundle.id}/manifest.plist`;
+   bundle.download_url = `itms-services://?action=download-manifest&url=${bundle.manifest_url}`;
+   return bundle;
+}
+
 v1.get('/bundles/:id', (req, res) => {
    let id = req.params.id;
 
@@ -13,10 +19,15 @@ v1.get('/bundles/:id', (req, res) => {
          return res.status(404).send();
       }
 
-      b.manifest_url = `${process.env.BASE_URL}/v1/bundles/${id}/manifest.plist`;
-      b.download_url = `itms-services://?action=download-manifest&url=${b.manifest_url}`;
+      b = prepareBundleObject(b);
 
       res.json(b);
+   });
+});
+
+v1.get('/bundles', (req, res) => {
+   Bundle.list(req.query).then((bundles) => {
+      res.json(bundles);
    });
 });
 

@@ -23,6 +23,30 @@ describe('Bundles API', () => {
             });
     });
 
+    describe('get list', () => {
+        it('should allow to get list of bundles', () => {
+            return apiRequest
+                .get('/v1/bundles')
+                .expect(200)
+                .expect((res) => {
+                    let body = res.body;
+
+                    expect(body).to.have.length(10);
+                })
+        });
+
+        it('should allow to get other page of list of bundles', () => {
+            return apiRequest
+                .get('/v1/bundles?page=2')
+                .expect(200)
+                .expect((res) => {
+                    let body = res.body;
+
+                    expect(body).to.have.length(4);
+                })
+        });
+    });
+
     describe('get', () => {
         it('should allow to get info about bundle', () => {
             return apiRequest
