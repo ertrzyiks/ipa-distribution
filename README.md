@@ -1,1 +1,1 @@
-# ipa-distribution
+# ipa-distribution [![wercker status](https://app.wercker.com/status/6f5a01038313ff8de7506599ecf900c1/s/master "wercker status")](https://app.wercker.com/project/bykey/6f5a01038313ff8de7506599ecf900c1)
