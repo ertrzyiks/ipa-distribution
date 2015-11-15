@@ -1,9 +1,13 @@
 import express from 'express';
+import consolidate from 'consolidate'
 import Bundle from '../model/bundle';
 
 var app = express();
 
 var v1 = express();
+v1.engine('nunjucks', consolidate.nunjucks);
+v1.set('view engine', 'nunjucks');
+v1.set('views', __dirname + '/views');
 
 function prepareBundleObject(bundle) {
    bundle.manifest_url = `${process.env.BASE_URL}/v1/bundles/${bundle.id}/manifest.plist`;
@@ -22,6 +26,23 @@ v1.get('/bundles/:id', (req, res) => {
       b = prepareBundleObject(b);
 
       res.json(b);
+   });
+});
+
+v1.get('/bundles/:id/manifest.plist', (req, res) => {
+   let id = req.params.id;
+
+   Bundle.get(id).then((b) => {
+      if (typeof b === 'undefined') {
+         return res.status(404).send();
+      }
+
+      b = prepareBundleObject(b);
+
+      res.header("Content-Type", "application/xml");
+      res.render('manifest', {
+         bundle: b
+      });
    });
 });
 

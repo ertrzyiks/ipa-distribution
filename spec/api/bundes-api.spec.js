@@ -25,6 +25,7 @@ describe('Bundles API', () => {
 
     describe('get list', () => {
         it('should allow to get list of bundles', () => {
+
             return apiRequest
                 .get('/v1/bundles')
                 .expect(200)
@@ -36,6 +37,7 @@ describe('Bundles API', () => {
         });
 
         it('should allow to get other page of list of bundles', () => {
+
             return apiRequest
                 .get('/v1/bundles?page=2')
                 .expect(200)
@@ -47,6 +49,7 @@ describe('Bundles API', () => {
         });
 
         it('should include manifest url and download url', () => {
+
             return apiRequest
                 .get('/v1/bundles')
                 .expect(200)
@@ -65,6 +68,7 @@ describe('Bundles API', () => {
 
     describe('get', () => {
         it('should allow to get info about bundle', () => {
+
             return apiRequest
                 .get('/v1/bundles/de305d54-75b4-431b-adb2-eb6b9e546014')
                 .expect(200)
@@ -91,9 +95,27 @@ describe('Bundles API', () => {
         });
 
         it('should respond with 404 error when requested with invalid id', () => {
+
             return apiRequest
                 .get('/v1/bundles/de305d54-75b4-431b-adb2-eb6b9e546099')
                 .expect(404);
+        });
+    });
+
+    describe('get manifest', () => {
+        it('should allow to get manifest xml for bundle', () => {
+
+            return apiRequest
+                .get('/v1/bundles/de305d54-75b4-431b-adb2-eb6b9e546014/manifest.plist')
+                .expect(200)
+                .expect('Content-type', /xml/)
+                .expect((res) => {
+                    let text = res.text;
+
+                    expect(text).to.contain('1.0.0');
+                    expect(text).to.contain('com.example.MyApp');
+                    expect(text).to.contain('http://example.com/MyApp-1.0.0.ipa');
+                })
         });
     });
 });
