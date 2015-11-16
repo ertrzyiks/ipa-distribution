@@ -2,4 +2,4 @@ require('dotenv').load();
 require('babel-core/register');
 
 var app = require('./src');
-app.start();
+app.start(process.env.PORT || 3000);
