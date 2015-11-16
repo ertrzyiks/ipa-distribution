@@ -39,7 +39,7 @@ describe('Bundle Model', () => {
     });
 
     describe('create', () => {
-        it('should  assign unique id for created bundle', () => {
+        it('should assign unique id for created bundle', () => {
             let bundle = {
                 app_id: 'com.example.JustForTest',
                 name: 'Just For Test',
@@ -49,6 +49,32 @@ describe('Bundle Model', () => {
 
             return expect(Bundle.create(bundle))
                 .to.eventually.have.property('id');
+        });
+
+        it('should fill created_at field for created bundle', () => {
+            let bundle = {
+                app_id: 'com.example.JustForTest',
+                name: 'Just For Test',
+                version: '1.0.0',
+                url: 'http://example.com/just-for-test.ipa'
+            };
+
+            return expect(Bundle.create(bundle))
+                .to.eventually.have.property('created_at')
+                .and.not.equal(null);
+        });
+
+        it('should fill updated_at field for created bundle', () => {
+            let bundle = {
+                app_id: 'com.example.JustForTest',
+                name: 'Just For Test',
+                version: '1.0.0',
+                url: 'http://example.com/just-for-test.ipa'
+            };
+
+            return expect(Bundle.create(bundle))
+                .to.eventually.have.property('updated_at')
+                .and.not.equal(null);
         });
 
         it('should accept overriden manifest url', () => {
@@ -150,6 +176,12 @@ describe('Bundle Model', () => {
 
             return expect(Bundle.list(params))
                 .to.eventually.have.length(5)
+        });
+
+        it('should sort by created_at DESC', () => {
+            return expect(Bundle.list().then(list => list[0]))
+                .to.eventually.have.property('created_at')
+                .and.equal(100)
         });
     });
 });

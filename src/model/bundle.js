@@ -14,11 +14,13 @@ function get(id) {
 function create(data) {
     data = data || {};
     data.id = uuid.v4();
+    data.created_at = new Date();
+    data.updated_at = data.created_at;
 
     return knex('bundles')
         .insert(data)
         .then((res) => {
-            return data;
+            return get(data.id);
         });
 }
 
@@ -31,6 +33,7 @@ function list(params) {
     return knex
         .select('*')
         .from('bundles')
+        .orderBy('created_at', 'DESC')
         .offset(options.pageSize * (options.page - 1))
         .limit(options.pageSize);
 }

@@ -8,7 +8,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.MyApp',
             name: 'MyApp',
             version: '1.0.0',
-            url: 'http://example.com/MyApp-1.0.0.ipa'
+            url: 'http://example.com/MyApp-1.0.0.ipa',
+            created_at: 0,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -16,7 +18,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.MyApp',
             name: 'MyApp',
             version: '1.0.1',
-            url: 'http://example.com/MyApp-1.0.1.ipa'
+            url: 'http://example.com/MyApp-1.0.1.ipa',
+            created_at: 0,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -24,7 +28,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.MyApp',
             name: 'MyApp',
             version: '1.0.2',
-            url: 'http://example.com/MyApp-1.0.2.ipa'
+            url: 'http://example.com/MyApp-1.0.2.ipa',
+            created_at: 0,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -32,7 +38,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.MyApp',
             name: 'MyApp',
             version: '1.0.3',
-            url: 'http://example.com/MyApp-1.0.3.ipa'
+            url: 'http://example.com/MyApp-1.0.3.ipa',
+            created_at: 0,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -40,7 +48,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.MyApp',
             name: 'MyApp',
             version: '1.0.4',
-            url: 'http://example.com/MyApp-1.0.4.ipa'
+            url: 'http://example.com/MyApp-1.0.4.ipa',
+            created_at: 0,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -48,7 +58,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.MyApp',
             name: 'MyApp',
             version: '1.0.5',
-            url: 'http://example.com/MyApp-1.0.5.ipa'
+            url: 'http://example.com/MyApp-1.0.5.ipa',
+            created_at: 0,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -56,7 +68,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.MyApp',
             name: 'MyApp',
             version: '1.0.6',
-            url: 'http://example.com/MyApp-1.0.6.ipa'
+            url: 'http://example.com/MyApp-1.0.6.ipa',
+            created_at: 0,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -64,7 +78,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.TestingApp',
             name: 'TestingApp',
             version: '1.0.0',
-            url: 'http://example.com/TestingApp-1.0.0.ipa'
+            url: 'http://example.com/TestingApp-1.0.0.ipa',
+            created_at: 0,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -72,7 +88,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.TestingApp',
             name: 'TestingApp',
             version: '1.0.1',
-            url: 'http://example.com/TestingApp-1.0.1.ipa'
+            url: 'http://example.com/TestingApp-1.0.1.ipa',
+            created_at: 0,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -80,7 +98,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.TestingApp',
             name: 'TestingApp',
             version: '1.0.2',
-            url: 'http://example.com/TestingApp-1.0.2.ipa'
+            url: 'http://example.com/TestingApp-1.0.2.ipa',
+            created_at: 0,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -88,7 +108,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.TestingApp',
             name: 'TestingApp',
             version: '1.0.3',
-            url: 'http://example.com/TestingApp-1.0.3.ipa'
+            url: 'http://example.com/TestingApp-1.0.3.ipa',
+            created_at: 0,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -96,7 +118,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.TestingApp',
             name: 'TestingApp',
             version: '1.0.4',
-            url: 'http://example.com/TestingApp-1.0.4.ipa'
+            url: 'http://example.com/TestingApp-1.0.4.ipa',
+            created_at: 100,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -104,7 +128,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.TestingApp',
             name: 'TestingApp',
             version: '1.0.5',
-            url: 'http://example.com/TestingApp-1.0.5.ipa'
+            url: 'http://example.com/TestingApp-1.0.5.ipa',
+            created_at: 0,
+            updated_at: 0
         }),
 
         knex('bundles').insert({
@@ -112,7 +138,9 @@ exports.seed = function(knex, Promise) {
             app_id: 'com.example.TestingApp',
             name: 'TestingApp',
             version: '1.0.6',
-            url: 'http://example.com/TestingApp-1.0.6.ipa'
+            url: 'http://example.com/TestingApp-1.0.6.ipa',
+            created_at: 0,
+            updated_at: 0
         })
   );
 };
