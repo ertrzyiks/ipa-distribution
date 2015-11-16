@@ -159,6 +159,39 @@ describe('Bundles API', () => {
                         .and.contain(body.manifest_url);
                 });
         });
+        it('should allow to override manifest_url', () => {
+
+            return apiRequest
+                .post('/v1/bundles')
+                .send({
+                    app_id: 'com.example.PostTest',
+                    name: 'PostTest',
+                    version: '1.0.2',
+                    url: 'http://example.com/PostTest-1.0.2.ipa',
+                    manifest_url: 'http://example.com/PostTest-1.0.2.plist'
+                })
+                .expect(200)
+                .expect('Content-type', /json/)
+                .expect((res) => {
+                    let body = res.body;
+
+                    expect(body).to.have.property('id');
+                    expect(body).to.have.property('app_id')
+                        .and.equal('com.example.PostTest');
+                    expect(body).to.have.property('name')
+                        .and.equal('PostTest');
+                    expect(body).to.have.property('version')
+                        .and.equal('1.0.2');
+                    expect(body).to.have.property('url')
+                        .and.equal('http://example.com/PostTest-1.0.2.ipa');
+                    expect(body).to.have.property('manifest_url')
+                        .and.equal('http://example.com/PostTest-1.0.2.plist');
+                    expect(body).to.have.property('download_url')
+                        .and.contain('itms-services://?action=download-manifest&url=')
+                        .and.contain(body.manifest_url);
+                });
+        });
+
         it('should reject payload without app_id', () => {
 
             return apiRequest

@@ -12,7 +12,7 @@ v1.set('view engine', 'nunjucks');
 v1.set('views', __dirname + '/views');
 
 function prepareBundleObject(bundle) {
-    bundle.manifest_url = `${process.env.BASE_URL}/v1/bundles/${bundle.id}/manifest.plist`;
+    bundle.manifest_url = bundle.manifest_url || `${process.env.BASE_URL}/v1/bundles/${bundle.id}/manifest.plist`;
     bundle.download_url = `itms-services://?action=download-manifest&url=${bundle.manifest_url}`;
     return bundle;
 }
