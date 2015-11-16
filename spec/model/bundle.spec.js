@@ -51,6 +51,20 @@ describe('Bundle Model', () => {
                 .to.eventually.have.property('id');
         });
 
+        it('should accept overriden manifest url', () => {
+            let bundle = {
+                app_id: 'com.example.JustForTest',
+                name: 'Just For Test',
+                version: '1.0.0',
+                url: 'http://example.com/just-for-test.ipa',
+                manifest_url: 'http://example.com/just-for-test.plist'
+            };
+
+            return expect(Bundle.create(bundle))
+                .to.eventually.have.property('manifest_url')
+                .and.equal('http://example.com/just-for-test.plist');
+        });
+
         it('should ignore given id for created bundle', () => {
             let bundle = {
                 id: 'de305d54-75b4-431b-adb2-eb6b9e546000',
