@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import consolidate from 'consolidate'
+import consolidate from 'consolidate';
 import Bundle from '../model/bundle';
 import _ from 'lodash';
 
@@ -42,7 +42,7 @@ v1.get('/bundles/:id/manifest.plist', (req, res) => {
 
         b = prepareBundleObject(b);
 
-        res.header("Content-Type", "application/xml");
+        res.header('Content-Type', 'application/xml');
         res.render('manifest', {
             bundle: b
         });
@@ -84,7 +84,7 @@ v1.put('/bundles/:id', (req, res) => {
         })
         .catch(err => {
             res.status(500).send(err);
-        })
+        });
 });
 
 app.use('/v1', v1);

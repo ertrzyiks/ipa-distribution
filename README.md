@@ -11,6 +11,8 @@ to simplify ad-hoc installation.
 Set environment variable `BASE_URL` to address of service, like `BASE_URL=http://localhost:3000`.
 You can do this by creating `.env` file or using env prefix of command `BASE_URL=http://localhost:3000 npm start`.
 
+If you want to enable debug output, add `DEBUG` variable to the file. The value should be set to eith `*` for all debug output from the application, or to `ipa-distribution:*` to see only the output from this application.
+
 ## Usage
 
 API Methods
