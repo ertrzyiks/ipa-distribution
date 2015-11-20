@@ -1,8 +1,12 @@
 import chai from 'chai';
+import sinon from 'sinon';
 import getDataConnector from '../../src/getDataConnector';
 import api from '../../src/api/app';
 import request from 'supertest-as-promised';
 import q from 'q';
+import Bundle from '../../src/model/bundle';
+
+let Promise = q.Promise;
 
 let expect = chai.expect;
 
@@ -10,6 +14,7 @@ let knex = getDataConnector();
 
 describe('Bundles API', () => {
     var apiRequest;
+    var bundleUpdateStub;
 
     beforeEach((next) => {
         apiRequest = request(api);
@@ -21,6 +26,13 @@ describe('Bundles API', () => {
             .then(() => {
                 next();
             });
+    });
+
+    afterEach(() => {
+        if (bundleUpdateStub) {
+            bundleUpdateStub.restore();
+            bundleUpdateStub = null;
+        }
     });
 
     describe('get list', () => {
@@ -45,6 +57,20 @@ describe('Bundles API', () => {
                     let body = res.body;
 
                     expect(body).to.have.length(4);
+                })
+        });
+
+        it('should return unpublished results for showunpublished in the query string', () => {
+
+            return apiRequest
+                .get('/v1/bundles?pageSize=100&showunpublished=true')
+                .expect(200)
+                .expect((res) => {
+                    let body = res.body;
+                    expect(body).to.have.length(15);
+
+                    var unpublished = body.filter(el => el.published == false)
+                    expect(unpublished).to.have.length(1);
                 })
         });
 
@@ -136,7 +162,8 @@ describe('Bundles API', () => {
                     app_id: 'com.example.PostTest',
                     name: 'PostTest',
                     version: '1.0.2',
-                    url: 'http://example.com/PostTest-1.0.2.ipa'
+                    url: 'http://example.com/PostTest-1.0.2.ipa',
+                    published: true
                 })
                 .expect(200)
                 .expect('Content-type', /json/)
@@ -157,8 +184,31 @@ describe('Bundles API', () => {
                     expect(body).to.have.property('download_url')
                         .and.contain('itms-services://?action=download-manifest&url=')
                         .and.contain(body.manifest_url);
+                    expect(body).to.have.property('published')
+                        .and.equal(1);
                 });
         });
+
+        it('should set published flag to false if omitted from request body', () => {
+
+            return apiRequest
+                .post('/v1/bundles')
+                .send({
+                    app_id: 'com.example.PostTest',
+                    name: 'PostTest',
+                    version: '1.0.2',
+                    url: 'http://example.com/PostTest-1.0.2.ipa'
+                })
+                .expect(200)
+                .expect('Content-type', /json/)
+                .expect((res) => {
+                    let body = res.body;
+
+                    expect(body).to.have.property('published')
+                        .and.equal(0);
+                });
+        });
+
         it('should allow to override manifest_url', () => {
 
             return apiRequest
@@ -240,4 +290,71 @@ describe('Bundles API', () => {
                 .expect(400);
         });
     });
+
+
+    describe('put', () => {
+
+        it('should allow to update bundle by id', () => {
+            apiRequest
+                .put('/v1/bundles/79dbdd38-1233-42f8-9d32-a1dad5871b52')
+                .send({
+                    published: 1
+                })
+                .expect(200)
+                .then(() => {
+                    return apiRequest
+                        .get('/v1/bundles/79dbdd38-1233-42f8-9d32-a1dad5871b52')
+                        .expect(res => {
+                            expect(res.body).to.have.property('published')
+                                .and.equal(1);
+                        });
+                });
+        });
+
+        it('should reject update without any data', () => {
+
+            return apiRequest
+                .put('/v1/bundles/79dbdd38-1233-42f8-9d32-a1dad5871b52')
+                .send({})
+                .expect(400);
+        });
+
+        it('should return 500 on database error', () => {
+            bundleUpdateStub = sinon.stub(Bundle, 'update').returns(Promise.reject());
+
+            return apiRequest
+                .put('/v1/bundles/79dbdd38-1233-42f8-9d32-a1dad5871b52')
+                .send({
+                    published: 1
+                })
+                .expect(500);
+        });
+
+        it('should not update id or created_at fields', () => {
+            apiRequest
+                .put('/v1/bundles/79dbdd38-1233-42f8-9d32-a1dad5871b52')
+                .send({
+                    published: 1,
+                    created_at: 100,
+                    id: "foo"
+                })
+                .expect(200)
+                .then(() => {
+                    return apiRequest
+                        .get('/v1/bundles/79dbdd38-1233-42f8-9d32-a1dad5871b52')
+                        .expect(res => {
+                            var body = res.body
+
+                            expect(body).to.have.property('published')
+                                .and.equal(1);
+                            expect(body).to.have.property('id')
+                                .and.equal('79dbdd38-1233-42f8-9d32-a1dad5871b52');
+                            expect(body).to.have.property('created_at')
+                                .and.not.equal(100);
+                        });
+                });
+        });
+
+    });
+
 });

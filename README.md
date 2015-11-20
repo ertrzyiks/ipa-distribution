@@ -18,6 +18,12 @@ API Methods
 #### Get list of bundles
 `GET /v1/bundles?page=<n>`
 
+By default the response will only contain published bundles.
+
+Filters:
+
+* `showunpublished` - if set to `true` returns a full list of bundles including the unpublished ones. 
+
 #### Create new bundle
 `POST /v1/bundles`
 
@@ -30,6 +36,18 @@ payload:
   "url": "<download_url>"
 }
 ```
+
+#### Update an existing bundle
+`PUT /v1/bundles/<id>`
+
+payload:
+```
+{
+  "published": "true"
+}
+```
+
+Allows updates to all properties of an existing bundle, apart from `id` and `created_at`. 
 
 #### Get info about single bundle
 `GET /v1/bundles/<id>`
