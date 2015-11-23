@@ -2,6 +2,9 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import getDataConnector from '../../src/getDataConnector';
 import Bundle from '../../src/model/bundle';
+import q from 'q';
+
+let Promise = q.Promise;
 
 chai.use(chaiAsPromised);
 
@@ -154,13 +157,57 @@ describe('Bundle Model', () => {
         });
     });
 
+    describe('update', () => {
+        it('should update given bundle fields apart from id and created_at', () => {
+            let data = {
+                published: 1,
+                created_at: 200,
+                id: "foo"
+            };
+
+            return Bundle.update('79dbdd38-1233-42f8-9d32-a1dad5871b52', data)
+                    .then(() => {
+                        let result = Bundle.get('79dbdd38-1233-42f8-9d32-a1dad5871b52');
+
+                        return Promise.resolve()
+                            .then(() =>
+                                expect(result).to.eventually.have.property('id')
+                                    .and.not.equal('foo')
+                            )
+                            .then(() =>
+                                expect(result).to.eventually.have.property('created_at')
+                                    .and.not.equal(200)
+                            )
+                            .then(() =>
+                                expect(result).to.eventually.have.property('published')
+                                    .and.equal(1)
+                            )
+                    });
+        });
+
+        it('should fill updated_at field for updated bundle', () => {
+            let data = {
+                published: 0
+            };
+
+            return Bundle.update('79dbdd38-1233-42f8-9d32-a1dad5871b52', data)
+                .then(() => {
+                    let result = Bundle.get('79dbdd38-1233-42f8-9d32-a1dad5871b52');
+
+                    return expect(result)
+                        .to.eventually.have.property('updated_at')
+                        .and.not.equal(0)
+                });
+        });
+    });
+
     describe('list', () => {
-        it('should first page of bundles', () => {
+        it('should return first page of bundles', () => {
             return expect(Bundle.list())
                 .to.eventually.have.length(10)
         });
 
-        it('should second page of bundles', () => {
+        it('should return second page of bundles', () => {
             var params = {
                 page: 2
             };
@@ -169,9 +216,19 @@ describe('Bundle Model', () => {
                 .to.eventually.have.length(4)
         });
 
-        it('should allow set page size', () => {
+        it('should allow setting page size', () => {
             var params = {
                 pageSize: 5
+            };
+
+            return expect(Bundle.list(params))
+                .to.eventually.have.length(5)
+        });
+
+        it('should return unpublished bundles when showunpublished is true', () => {
+            var params = {
+                page: 2,
+                showunpublished: true
             };
 
             return expect(Bundle.list(params))

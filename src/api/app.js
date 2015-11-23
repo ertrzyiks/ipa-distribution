@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import consolidate from 'consolidate'
 import Bundle from '../model/bundle';
+import _ from 'lodash';
 
 var app = express();
 
@@ -69,6 +70,22 @@ v1.post('/bundles', (req, res) => {
         });
 });
 
+v1.put('/bundles/:id', (req, res) => {
+    let id = req.params.id;
+
+    if (!id || _.isEmpty(req.body)) {
+        res.status(400).send();
+    }
+
+    Bundle
+        .update(id, req.body)
+        .then(b => {
+            res.status(200).send();
+        })
+        .catch(err => {
+            res.status(500).send(err);
+        })
+});
 
 app.use('/v1', v1);
 
