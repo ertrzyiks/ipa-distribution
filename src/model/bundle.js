@@ -54,7 +54,7 @@ function getFilteredQuery(options) {
 
     if (!options.showunpublished || options.showunpublished === 'false') {
         query = query
-                .where({ published: true })
+                .where({ published: true });
     }
 
     return query;
