@@ -1,36 +1,64 @@
 import defaults from 'defaults';
 import uuid from 'node-uuid';
-import getDataConnector from '../../src/getDataConnector';
-import _ from 'lodash';
+import getBookshelf from '../../src/getBookshelf';
+import checkit from 'checkit';
 
-let knex = getDataConnector();
+let bookshelf = getBookshelf();
+
+class Bundle extends bookshelf.Model {
+
+    get tableName() { return 'bundles'; }
+    get hasTimestamps() { return true; }
+
+    constructor(...args) {
+        super(...args);
+
+        this.on('creating', this.generateId);
+        this.on('saving', this.validateBundle);
+    }
+
+    generateId(model, attrs, options) {
+        model.set('id', uuid.v4());
+    }
+
+    validateBundle(model, attrs, options) {
+        let rules = {};
+
+        return checkit(rules).run(attrs);
+    }
+}
 
 function get(id) {
-    return knex
-        .first('*')
-        .from('bundles')
-        .where('id', id);
+    let bundle = Bundle.forge({ id });
+
+    return bundle
+        .fetch({
+            require: true
+        })
+        .then(b => b.toJSON());
 }
 
 function create(data) {
     data = data || {};
-    data.id = uuid.v4();
-    data.created_at = new Date();
-    data.updated_at = data.created_at;
+    delete data.id;
 
-    return knex('bundles')
-        .insert(data)
-        .then((res) => {
-            return get(data.id);
-        });
+    let bundle = Bundle.forge(data);
+
+    return bundle
+        .save()
+        .then(b => b.toJSON());
 }
 
 function update(id, data) {
-    var updatedData = prepareBundleUpdateData(data);
-    return knex('bundles')
-            .where('id', id)
-            .limit(1)
-            .update(updatedData);
+    let bundle = Bundle.forge({ id });
+
+    delete data.id;
+    delete data.created_at;
+    delete data.updated_at;
+
+    return bundle
+        .save(data)
+        .then(b => b.toJSON());
 }
 
 function list(params) {
@@ -39,34 +67,18 @@ function list(params) {
         pageSize: 10
     });
 
-    var filteredQuery = getFilteredQuery(options);
+    return Bundle.forge()
+        .query(qb => {
+            if (!options.showunpublished || options.showunpublished === 'false') {
+                qb.where({ published: true });
+            }
 
-    return filteredQuery
-        .orderBy('created_at', 'DESC')
-        .offset(options.pageSize * (options.page - 1))
-        .limit(options.pageSize);
-}
-
-function getFilteredQuery(options) {
-    var query = knex
-                .select('*')
-                .from('bundles');
-
-    if (!options.showunpublished || options.showunpublished === 'false') {
-        query = query
-                .where({ published: true });
-    }
-
-    return query;
-}
-
-function prepareBundleUpdateData(data) {
-    delete data.id;
-    delete data.created_at;
-
-    data.updated_at = new Date();
-
-    return data;
+            qb.orderBy('created_at', 'DESC');
+            qb.offset(options.pageSize * (options.page - 1));
+            qb.limit(options.pageSize);
+        })
+        .fetchAll()
+        .then(list => list.toJSON());
 }
 
 export default {

@@ -35,9 +35,9 @@ describe('Bundle Model', () => {
                 .and.equal('com.example.TestingApp');
         });
 
-        it('should be resolved with undefined when bundle does not exists', () => {
+        it('should be rejected when bundle does not exists', () => {
             return expect(Bundle.get('de305d54-75b4-431b-adb2-eb6b9e546099'))
-                .to.eventually.be.an('undefined');
+                .to.eventually.be.rejected;
         });
     });
 
