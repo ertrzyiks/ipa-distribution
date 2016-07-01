@@ -18,6 +18,11 @@ function prepareBundleObject(bundle) {
     return bundle;
 }
 
+v1.use(function(req, res, next) {
+    console.log('Caught request!: ', req.originalUrl)
+    next()
+})
+
 v1.get('/bundles/:id', (req, res) => {
     let id = req.params.id;
 
@@ -46,6 +51,7 @@ v1.get('/bundles/:id/manifest.plist', (req, res) => {
 });
 
 v1.get('/bundles', (req, res) => {
+    console.log('bundles call')
     Bundle
         .list(req.query)
         .then(bundles => bundles.map(prepareBundleObject))
@@ -77,6 +83,11 @@ v1.put('/bundles/:id', (req, res) => {
         });
 });
 
+v1.get('/', (req, res) => {
+    res.send('Hello from ipa distribution!')
+})
+
 app.use('/v1', v1);
+app.use('/', v1)
 
 export default app;
